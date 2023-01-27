@@ -7,6 +7,7 @@ const PORT = process.env.PORT;
 const MONGODB = process.env.MONGODB;
 const DOMAIN = process.env.DOMAIN;
 
+
 // Connect to DB
 mongoose.connect(MONGODB, {
     useNewUrlParser: true,
@@ -20,9 +21,12 @@ const user = require('./routes/user');
 const comment = require('./routes/comment');
 const post = require('./routes/post');
 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
 app.use('/api/user', user);
-app.use('/api/comment', comment);
-app.use('/api/post', post);
+// app.use('/api/comment', comment);
+// app.use('/api/post', post);
 
 app.listen(PORT || 3000, function() {
     console.log(`Listening on ${DOMAIN}:${PORT}`);
