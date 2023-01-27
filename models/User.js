@@ -25,7 +25,12 @@ const UserSchema = new Schema({
 });
 
 User.methods.generateJWTToken = function(){
-    return jwt.sign(this.email_address, process.env.JWT_SECRET);
+    const user = {
+        email: this.email_address,
+        id: this._id
+    }
+
+    return jwt.sign(user, process.env.JWT_SECRET);
 }
 
 User.virtual('name').get(function() {
