@@ -1,10 +1,19 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
 
 const dotenv = require('dotenv').config();
 const PORT = process.env.PORT;
 const MONGODB = process.env.MONGODB;
 const DOMAIN = process.env.DOMAIN;
+
+// Connect to DB
+mongoose.connect(MONGODB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+const DB = mongoose.connection;
+DB.on('error', console.error.bind(console, 'MongoDB Connection Error: '));
 
 // ROUTES
 const user = require('./routes/user');
