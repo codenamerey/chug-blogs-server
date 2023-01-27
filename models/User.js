@@ -24,7 +24,7 @@ const UserSchema = new Schema({
     }
 });
 
-User.methods.generateJWTToken = function(){
+UserSchema.methods.generateJWTToken = function(){
     const user = {
         email: this.email_address,
         id: this._id
@@ -33,7 +33,7 @@ User.methods.generateJWTToken = function(){
     return jwt.sign(user, process.env.JWT_SECRET);
 }
 
-User.virtual('name').get(function() {
+UserSchema.virtual('name').get(function() {
     return `${this.first_name} ${this.last_name}`;
 });
 
