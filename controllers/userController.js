@@ -37,8 +37,6 @@ exports.local_sign_in = (req, res, next) => {
             const token = user.generateJWTToken();
             res.status(200).json({message: 'Logged in', token});
         } else {
-            console.log(user);
-            console.log(req.body);
             res.status(422).json({message: 'Invalid credentials'});
         }
         
