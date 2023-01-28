@@ -7,10 +7,11 @@ const User = require('../models/User');
 const dotenv = require('dotenv').config();
 
 const jwtLogin = new jwtStrategy({
-    jwtFromRequest: ExtractJwt.fromHeader('token'),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET
 }, async(payload, done) => {
     try {
+        console.log(payload);
         const user = await User.find({email_address: payload.email});
         if (user) {
             done(null, user);
