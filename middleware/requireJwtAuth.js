@@ -3,4 +3,4 @@ const jwt = require('jsonwebtoken');
 
 const requireJwtAuth = passport.authenticate('jwt', {session: false});
 
-export default requireJwtAuth;
+module.exports = requireJwtAuth;
