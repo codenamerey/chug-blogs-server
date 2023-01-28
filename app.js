@@ -14,6 +14,7 @@ app.use(express.json());
 
 app.use(passport.initialize());
 require('./services/localStrategy');
+require('./services/jwtStrategy');
 
 // Connect to DB
 mongoose.connect(MONGODB, {
