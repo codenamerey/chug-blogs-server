@@ -1,5 +1,6 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const requireJwtAuth = require('../middleware/requireJwtAuth');
 
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
@@ -34,7 +35,6 @@ exports.local_sign_in = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if(err) return next(err);
         if(user) {
-            delete user.password;
             const token = `BEARER ${user.generateJWTToken()}`;
             res.status(200).json({message: 'Logged in', token});
         } else {
@@ -43,3 +43,10 @@ exports.local_sign_in = (req, res, next) => {
         
     })(req, res, next)
 }
+
+exports.get_me = [
+    requireJwtAuth,
+    (req, res, next) => {
+        res.status(200).json(req.user)
+    }
+];
