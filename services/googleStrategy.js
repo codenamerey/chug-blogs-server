@@ -10,7 +10,7 @@ const googleLogin = new GoogleStrategy({
     callbackURL: '/google/callback'
 }, async(accessToken, refreshToken, profile, done) => {
     try {
-        const user = await User.find({email_address: profile.email});
+        const user = await User.findOne({email_address: profile.email});
         if(user) {
             done(null, user);
         } else {
