@@ -34,7 +34,8 @@ exports.local_sign_in = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if(err) return next(err);
         if(user) {
-            const token = user.generateJWTToken();
+            delete user.password;
+            const token = `BEARER ${user.generateJWTToken()}`;
             res.status(200).json({message: 'Logged in', token});
         } else {
             res.status(422).json({message: 'Invalid credentials'});
