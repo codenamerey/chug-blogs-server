@@ -54,3 +54,22 @@ exports.get_me = [
         res.status(200).json(user)
     }
 ];
+
+// Google Strategy
+
+exports.get_google = passport.authenticate('google', {
+    scope: ['email', 'profile']
+});
+
+exports.google_callback = [passport.authenticate('google', {
+    failureRedirect: '/login/failure',
+    session: false
+}), (req, res) => {
+    const token = req.user.generateJWTToken();
+    console.log(token);
+    res.redirect(`${process.env.clientServer}/google/login?token=${token}`);
+}]
+
+exports.google_login_success = (req, res, next) => {
+    console.log('req.user', req.req);
+}

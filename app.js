@@ -17,6 +17,7 @@ app.use(cors());
 app.use(passport.initialize());
 require('./services/localStrategy');
 require('./services/jwtStrategy');
+require('./services/googleStrategy');
 
 // Connect to DB
 mongoose.connect(MONGODB, {
