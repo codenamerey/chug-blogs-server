@@ -10,7 +10,7 @@ const dotenv = require('dotenv').config();
 exports.local_sign_up = async(req, res, next) => {
     try {
         const { email_address, display_picture, password, first_name, last_name } = req.body;
-        const user = await User.find({email_address});
+        const user = await User.findOne({email_address});
 
         if(user) return res.status(422).json({message: 'User already exists'});
 
@@ -47,6 +47,10 @@ exports.local_sign_in = (req, res, next) => {
 exports.get_me = [
     requireJwtAuth,
     (req, res, next) => {
-        res.status(200).json(req.user)
+        let user = Object.assign({}, req.user)._doc;
+        delete user.password;
+        console.log(user);
+
+        res.status(200).json(user)
     }
 ];
