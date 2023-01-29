@@ -11,6 +11,5 @@ router.get('/me', userController.get_me);
 // Google Strategy Auth
 router.get('/google', userController.get_google);
 router.get('/google/callback', userController.google_callback);
-router.get('/login/success', userController.google_login_success)
 
 module.exports = router;

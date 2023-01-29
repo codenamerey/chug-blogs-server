@@ -49,7 +49,6 @@ exports.get_me = [
     (req, res, next) => {
         let user = Object.assign({}, req.user)._doc;
         delete user.password;
-        console.log(user);
 
         res.status(200).json(user)
     }
@@ -66,10 +65,5 @@ exports.google_callback = [passport.authenticate('google', {
     session: false
 }), (req, res) => {
     const token = req.user.generateJWTToken();
-    console.log(token);
     res.redirect(`${process.env.clientServer}/google/login?token=${token}`);
 }]
-
-exports.google_login_success = (req, res, next) => {
-    console.log('req.user', req.req);
-}
