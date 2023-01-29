@@ -11,7 +11,7 @@ const jwtLogin = new jwtStrategy({
     secretOrKey: process.env.JWT_SECRET
 }, async(payload, done) => {
     try {
-        const user = await User.find({email_address: payload.email});
+        const user = await User.findOne({email_address: payload.email});
         if (user) {
             done(null, user);
         } else {
