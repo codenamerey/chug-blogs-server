@@ -24,9 +24,9 @@ exports.local_sign_up = async(req, res, next) => {
         });
 
         await newUser.save();
-        res.status(200).json({message: 'New user created.'});
+        res.status(200).json({success: true, message: 'New user created.'});
     } catch(err) {
-        res.status(500).json({err: err.message});
+        res.status(500).json({success: false, err: err.message});
     }
         
 }
