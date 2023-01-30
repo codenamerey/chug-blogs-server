@@ -48,3 +48,17 @@ exports.post_get_one = async(req, res) => {
     const post = await Post.findById(req.params.id);
     res.status(200).json(post);
 }
+
+exports.post_edit = [requireJwtAuth, async(req, res) => {
+    const { title, description, content } = req.body;
+    try {
+        const post = await Post.findByIdAndUpdate(req.params.id, {
+            title,
+            description,
+            content
+        });
+        res.status(200).json({success: true});
+    } catch(err) {
+        res.status(500).json({success: false, error: err.message});
+    }
+}]
