@@ -43,3 +43,8 @@ exports.post_get_all = async(req, res) => {
     const posts = await Post.find({});
     res.status(200).json(posts);
 }
+
+exports.post_get_one = async(req, res) => {
+    const post = await Post.findById(req.params.id);
+    res.status(200).json(post);
+}
