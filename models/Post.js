@@ -18,10 +18,6 @@ const PostSchema = new Schema({
     description: {
         type: String
     },
-    slug: {
-        type: String,
-        required: true
-    },
     post_image: {
         type: String
     },
