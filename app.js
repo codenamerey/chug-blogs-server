@@ -34,7 +34,7 @@ const post = require('./routes/post');
 
 app.use('/api/user', user);
 // app.use('/api/comment', comment);
-// app.use('/api/post', post);
+app.use('/api/post', post);
 
 app.listen(PORT || 3000, function() {
     console.log(`Listening on ${DOMAIN}:${PORT}`);

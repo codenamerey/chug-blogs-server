@@ -1,0 +1,40 @@
+const User = require('../models/User');
+const Post = require('../models/Post');
+const requireJwtAuth = require('../middleware/requireJwtAuth');
+
+const sanitizeHtml = require('sanitize-html');
+
+exports.post_create = [requireJwtAuth, async(req, res, next) => {
+    const email_address = req.user.email_address;
+    const user = await User.findOne({email_address});
+
+    if(user) {
+        try {
+            const {
+                title,
+                description,
+                content,
+                post_image,
+                private
+            } = req.body;
+
+            const new_post = new Post({
+                title,
+                description,
+                content: sanitizeHtml(content),
+                author: user,
+                post_image,
+                private
+            }).save();
+
+            res.status(200).json({success: true})
+        }
+        catch(err) {
+            res.status(500).json({success: false, message: err.message})
+        }
+    } else {
+        res.status(422).json({success: false, message: 'You are unauthorized to create posts'});S
+    }
+
+
+}] 
