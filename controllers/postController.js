@@ -33,14 +33,15 @@ exports.post_create = [requireJwtAuth, async(req, res, next) => {
             res.status(500).json({success: false, message: err.message})
         }
     } else {
-        res.status(422).json({success: false, message: 'You are unauthorized to create posts'});S
+        res.status(422).json({success: false, message: 'You are unauthorized to create posts'});
     }
 
 
 }]
 
 exports.post_get_all = async(req, res) => {
-    const posts = await Post.find({});
+    const posts = await Post.find({})
+                            .populate('author', ['_id', 'first_name']);
     res.status(200).json(posts);
 }
 
