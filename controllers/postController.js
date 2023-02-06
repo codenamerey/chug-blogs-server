@@ -21,7 +21,12 @@ exports.post_create = [requireJwtAuth, async(req, res, next) => {
             const new_post = new Post({
                 title,
                 description,
-                content: sanitizeHtml(content),
+                content: sanitizeHtml(content, {
+                    allowedTags: ['span', 'p', 'b', 'strong'],
+                    allowedAttributes: {
+                        'span': ['style']
+                    }
+                }),
                 author: user,
                 post_image,
                 private
@@ -46,7 +51,8 @@ exports.post_get_all = async(req, res) => {
 }
 
 exports.post_get_one = async(req, res) => {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id)
+                           .populate('author', ['_id', 'first_name'])
     res.status(200).json(post);
 }
 
@@ -63,3 +69,24 @@ exports.post_edit = [requireJwtAuth, async(req, res) => {
         res.status(500).json({success: false, error: err.message});
     }
 }]
+
+exports.post_delete = [
+    requireJwtAuth,
+    async(req, res) => {
+        const { _id } = req.user;
+        try {
+            const post = await Post.findById(req.params.id)
+                                   .populate('author', '_id')
+            console.log(post.author._id);
+            console.log(_id);
+            if(post.author._id.equals(_id)) {
+                post.delete()
+                res.status(200).json({success: true});
+            } else {
+                res.status(422).json({success: false, error: 'User unauthorized to delete.'});
+            }
+        } catch(err) {
+            res.status(500).json({success:false, error: err.message})
+        }
+    }
+]
