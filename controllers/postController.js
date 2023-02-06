@@ -24,7 +24,8 @@ exports.post_create = [requireJwtAuth, async(req, res, next) => {
                 content: sanitizeHtml(content, {
                     allowedTags: ['span', 'p', 'b', 'strong'],
                     allowedAttributes: {
-                        'span': ['style']
+                        'span': ['style'],
+                        'p': ['style']
                     }
                 }),
                 author: user,
@@ -62,7 +63,12 @@ exports.post_edit = [requireJwtAuth, async(req, res) => {
         const post = await Post.findByIdAndUpdate(req.params.id, {
             title,
             description,
-            content
+            content: sanitizeHtml(content, {
+                allowedAttributes: {
+                    'span': ['style'],
+                    'p': ['style']
+                }
+            })
         });
         res.status(200).json({success: true});
     } catch(err) {
