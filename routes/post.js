@@ -6,7 +6,8 @@ const {
    post_get_all,
    post_get_one,
    post_edit,
-   post_delete 
+   post_delete,
+   post_image_handler
 } = require('../controllers/postController');
 
 router.get('/', post_get_all);
@@ -15,5 +16,7 @@ router.post('/', post_create);
 router.get('/:id', post_get_one);
 router.put('/:id', post_edit);
 router.delete('/:id', post_delete);
+
+// router.get('/image', post_image_handler);
 
 module.exports = router;

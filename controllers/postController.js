@@ -22,11 +22,13 @@ exports.post_create = [requireJwtAuth, async(req, res, next) => {
                 title,
                 description,
                 content: sanitizeHtml(content, {
-                    allowedTags: ['span', 'p', 'b', 'strong'],
+                    allowedTags: ['span', 'p', 'b', 'strong', 'ul', 'ol', 'li', 'a'],
                     allowedAttributes: {
                         'span': ['style'],
-                        'p': ['style']
-                    }
+                        'p': ['style'],
+                        'a': ['href'],
+                        'ul': ['style']
+                    },
                 }),
                 author: user,
                 post_image,
@@ -64,10 +66,13 @@ exports.post_edit = [requireJwtAuth, async(req, res) => {
             title,
             description,
             content: sanitizeHtml(content, {
+                allowedTags: ['span', 'p', 'b', 'strong', 'ul', 'li', 'a', 'ol'],
                 allowedAttributes: {
                     'span': ['style'],
-                    'p': ['style']
-                }
+                    'p': ['style'],
+                    'a': ['href'],
+                    'ul': ['style']
+                },
             })
         });
         res.status(200).json({success: true});
@@ -83,8 +88,7 @@ exports.post_delete = [
         try {
             const post = await Post.findById(req.params.id)
                                    .populate('author', '_id')
-            console.log(post.author._id);
-            console.log(_id);
+
             if(post.author._id.equals(_id)) {
                 post.delete()
                 res.status(200).json({success: true});
@@ -96,3 +100,7 @@ exports.post_delete = [
         }
     }
 ]
+
+exports.post_image_handler = (req, res, next) => {
+
+}
