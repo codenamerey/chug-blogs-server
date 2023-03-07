@@ -83,8 +83,6 @@ exports.post_delete = [
         try {
             const post = await Post.findById(req.params.id)
                                    .populate('author', '_id')
-            console.log(post.author._id);
-            console.log(_id);
             if(post.author._id.equals(_id)) {
                 post.delete()
                 res.status(200).json({success: true});
