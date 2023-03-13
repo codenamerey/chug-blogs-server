@@ -13,10 +13,12 @@ const {
 router.get('/', post_get_all);
 router.post('/', post_create);
 
+router.post('/image', post_image_handler);
+
 router.get('/:id', post_get_one);
 router.put('/:id', post_edit);
 router.delete('/:id', post_delete);
 
-// router.get('/image', post_image_handler);
+
 
 module.exports = router;
