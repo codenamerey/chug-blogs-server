@@ -3,11 +3,22 @@ const Post = require('../models/Post');
 const requireJwtAuth = require('../middleware/requireJwtAuth');
 
 const sanitizeHtml = require('sanitize-html');
+const imgbbUploader = require('imgbb-uploader');
+
+const opts = {
+    allowedTags: ['span', 'p', 'b', 'strong', 'ul', 'ol', 'li', 'a', 'img'],
+    allowedAttributes: {
+        'span': ['style'],
+        'p': ['style'],
+        'a': ['href'],
+        'ul': ['style'],
+        'img': ['src', 'width', 'height']
+    },
+}
 
 exports.post_create = [requireJwtAuth, async(req, res, next) => {
     const email_address = req.user.email_address;
     const user = await User.findOne({email_address});
-
     if(user) {
         try {
             const {
@@ -21,13 +32,7 @@ exports.post_create = [requireJwtAuth, async(req, res, next) => {
             const new_post = new Post({
                 title,
                 description,
-                content: sanitizeHtml(content, {
-                    allowedTags: ['span', 'p', 'b', 'strong'],
-                    allowedAttributes: {
-                        'span': ['style'],
-                        'p': ['style']
-                    }
-                }),
+                content: sanitizeHtml(content, opts),
                 author: user,
                 post_image,
                 private
@@ -47,7 +52,7 @@ exports.post_create = [requireJwtAuth, async(req, res, next) => {
 
 exports.post_get_all = async(req, res) => {
     const posts = await Post.find({})
-                            .populate('author', ['_id', 'first_name']);
+                            .populate('author', ['_id', 'first_name'])
     res.status(200).json(posts);
 }
 
@@ -63,12 +68,7 @@ exports.post_edit = [requireJwtAuth, async(req, res) => {
         const post = await Post.findByIdAndUpdate(req.params.id, {
             title,
             description,
-            content: sanitizeHtml(content, {
-                allowedAttributes: {
-                    'span': ['style'],
-                    'p': ['style']
-                }
-            })
+            content: sanitizeHtml(content, opts)
         });
         res.status(200).json({success: true});
     } catch(err) {
@@ -83,6 +83,10 @@ exports.post_delete = [
         try {
             const post = await Post.findById(req.params.id)
                                    .populate('author', '_id')
+<<<<<<< HEAD
+=======
+
+>>>>>>> image-upload
             if(post.author._id.equals(_id)) {
                 post.delete()
                 res.status(200).json({success: true});
@@ -94,3 +98,18 @@ exports.post_delete = [
         }
     }
 ]
+
+exports.post_image_handler = async(req, res, next) => {
+    const {
+        file
+    } = req.body;
+
+    const response = await imgbbUploader({
+        apiKey: process.env.imgBBKey,
+        base64string: file
+    })
+
+    res.json({
+        image: response.url
+    })
+}
