@@ -52,7 +52,7 @@ exports.post_create = [requireJwtAuth, async(req, res, next) => {
 
 exports.post_get_all = async(req, res) => {
     const posts = await Post.find({})
-                            .populate('author', ['_id', 'first_name']);
+                            .populate('author', ['_id', 'first_name'])
     res.status(200).json(posts);
 }
 
@@ -96,14 +96,17 @@ exports.post_delete = [
     }
 ]
 
-exports.post_image_handler = async (req, res, next) => {
-    const opts = {
-        apiKey: process.env.imgBBKey,
-        base64string: req.body.file
-    }
+exports.post_image_handler = async(req, res, next) => {
+    const {
+        file
+    } = req.body;
 
-    let data = await imgbbUploader(opts)
-    res.status(200).json({
-        message: 'OK'
+    const response = await imgbbUploader({
+        apiKey: process.env.imgBBKey,
+        base64string: file
+    })
+
+    res.json({
+        image: response.url
     })
 }
